@@ -8,6 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// Greeting
+window.onload = function() {
+    var greeting = 'Hello';
+    var message = ', welcome to my portfolio';
+    var welcome = greeting + name + message;
+
+    var greetingElement = document.getElementById('greeting');
+    if (greetingElement) {
+        greetingElement.textContent = welcome;
+    }
+};
+
 // Video controls function
 document.addEventListener("DOMContentLoaded", () => {
     const videoElement = document.getElementById("experience-video");
