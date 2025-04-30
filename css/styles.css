@@ -439,6 +439,87 @@ section {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Inquiry Form Section */
+.inquiry-form-section {
+    padding: 5rem 12%;
+    background-color: #f8f8f8;
+    border-radius: 1rem;
+    margin-top: 5rem;
+    text-align: center;
+}
+
+.inquiry-form-section h2 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="checkbox"] {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.5rem;
+    border-radius: 3rem;
+    border: 2px solid #000;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 1rem;
+}
+
+.form-group input[type="checkbox"]:checked {
+    background-color: #ff5200;
+    border: 2px solid #ff5200;
+}
+
+.inquiry-form-section .btn {
+    padding: 1rem 3rem;
+    background-color: #ff5200;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border-radius: 3rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.inquiry-form-section .btn:hover {
+    background-color: #ff2800;
+    transform: scale(1.05);
+}
+
+.inquiry-form-section .output-box {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 2px solid #ddd;
+    color: #333;
+}
+
+.output-box p {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.output-box strong {
+    color: #ff5200;
+}
+
 /* Footer Styles */
 footer {
     bottom: 0;
