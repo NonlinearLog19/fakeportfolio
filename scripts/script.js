@@ -120,3 +120,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const inquiryForm = document.getElementById("inquiry-form");
+    const inquiryOutput = document.getElementById("inquiry-output");
+  
+    inquiryForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+  
+      const name = document.getElementById("client-name").value;
+      const email = document.getElementById("client-email").value;
+      const selectedServices = document.querySelectorAll('input[name="services"]:checked');
+  
+      let servicesList = '';
+      for (let i = 0; i < selectedServices.length; i++) {
+        servicesList += '- ' + selectedServices[i].value + '<br>';
+      }
+  
+      inquiryOutput.innerHTML = `
+        <p>Thank you, <strong>${name}</strong>!</p>
+        <p>We've received your inquiry for the following services:</p>
+        <p>${servicesList || 'No services selected.'}</p>
+        <p>We will contact you at: <strong>${email}</strong></p>
+      `;
+    });
+  });
