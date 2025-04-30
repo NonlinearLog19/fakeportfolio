@@ -151,6 +151,28 @@
         </div>
     </div>
 
+    <section class="inquiry-form-section" id="inquiry">
+        <h2 class="section-title">Photography Inquiry Form</h2>
+        <form id="inquiry-form">
+          <div class="form-group">
+            <label for="client-name">Name:</label>
+            <input type="text" id="client-name" name="client-name" required>
+          </div>
+          <div class="form-group">
+            <label for="client-email">Email:</label>
+            <input type="email" id="client-email" name="client-email" required>
+          </div>
+          <div class="form-group">
+            <p>Select the services you are interested in:</p>
+            <label><input type="checkbox" name="services" value="Portrait Session"> Portrait Session</label><br>
+            <label><input type="checkbox" name="services" value="Event Photography"> Event Photography</label><br>
+            <label><input type="checkbox" name="services" value="Product Photography"> Product Photography</label><br>
+          </div>
+          <button type="submit" class="btn">Submit Inquiry</button>
+        </form>
+        <div id="inquiry-output" class="output-box"></div>
+      </section>      
+
     <footer>
         <ul>
             <li><a href="about.html">About</a></li>
