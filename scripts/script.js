@@ -9,14 +9,120 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Greeting
-window.onload = function() {
+function loadGreeting() {
     var greeting = 'Hello';
     var message = ', welcome to my portfolio';
-    var welcome = greeting + name + message;
+    var welcome = greeting + message;
 
     var greetingElement = document.getElementById('greeting');
     if (greetingElement) {
         greetingElement.textContent = welcome;
+    }
+}
+
+// Map initialization
+var venueMap;
+function initMap() {
+    var pinLocation = new google.maps.LatLng(48.4212, -122.3341); // Mount Vernon, WA, 98273
+
+    var mapOptions = {
+        zoom: 15,
+        center: pinLocation,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        panControl: false,
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+            position: google.maps.ControlPosition.TOP_LEFT
+        },
+        scaleControl: true,
+        scaleControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER
+        },
+        streetViewControl: false,
+        overviewMapControl: false,
+        styles: [
+            {
+                stylers: [
+                    { hue: "#ff5200" }, // Match site's orange gradient
+                    { saturation: -20 }
+                ]
+            }, {
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [
+                    { lightness: 100 },
+                    { visibility: "simplified" }
+                ]
+            }, {
+                featureType: "transit",
+                elementType: "geometry",
+                stylers: [
+                    { hue: "#ff6600" },
+                    { saturation: +80 }
+                ]
+            }, {
+                featureType: "transit",
+                elementType: "labels",
+                stylers: [
+                    { hue: "#ff0066" },
+                    { saturation: +80 }
+                ]
+            }, {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }, {
+                featureType: "poi.park",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "on" }
+                ]
+            }, {
+                featureType: "water",
+                elementType: "geometry",
+                stylers: [
+                    { hue: "#c4f4f4" }
+                ]
+            }, {
+                featureType: "road",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
+    };
+
+    venueMap = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    var marker = new google.maps.Marker({
+        position: pinLocation,
+        map: venueMap,
+        title: "Daniel Snezhko - Mount Vernon, WA"
+    });
+}
+
+function loadMapScript() {
+    var script = document.createElement('script');
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC7fhkL3qtYnlspvmP90kzxhZ2UBIZLPsI&callback=initMap';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+}
+
+// Combined onload function
+window.onload = function() {
+    loadGreeting();
+    if (document.getElementById('map')) {
+        loadMapScript();
     }
 };
 
@@ -27,34 +133,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const pauseButton = document.getElementById("pause-btn");
     const fullscreenButton = document.getElementById("fullscreen-btn");
 
-    playButton.addEventListener("click", () => videoElement.play());
-    pauseButton.addEventListener("click", () => videoElement.pause());
+    if (videoElement && playButton && pauseButton && fullscreenButton) {
+        playButton.addEventListener("click", () => videoElement.play());
+        pauseButton.addEventListener("click", () => videoElement.pause());
 
-    fullscreenButton.addEventListener("click", () => {
-        if (!document.fullscreenElement) {
-            videoElement.requestFullscreen?.() || videoElement.webkitRequestFullscreen?.() || videoElement.mozRequestFullScreen?.();
-        } else {
-            document.exitFullscreen?.() || document.webkitExitFullscreen?.() || document.mozCancelFullScreen?.();
-        }
-    });
+        fullscreenButton.addEventListener("click", () => {
+            if (!document.fullscreenElement) {
+                videoElement.requestFullscreen?.() || videoElement.webkitRequestFullscreen?.() || videoElement.mozRequestFullScreen?.();
+            } else {
+                document.exitFullscreen?.() || document.webkitExitFullscreen?.() || document.mozCancelFullScreen?.();
+            }
+        });
 
-    videoElement.addEventListener("play", () => {
-        playButton.style.opacity = "0.6";
-        pauseButton.style.opacity = "1";
-    });
+        videoElement.addEventListener("play", () => {
+            playButton.style.opacity = "0.6";
+            pauseButton.style.opacity = "1";
+        });
 
-    videoElement.addEventListener("pause", () => {
-        playButton.style.opacity = "1";
-        pauseButton.style.opacity = "0.6";
-    });
+        videoElement.addEventListener("pause", () => {
+            playButton.style.opacity = "1";
+            pauseButton.style.opacity = "0.6";
+        });
 
-    const updateFullscreenText = () => {
-        fullscreenButton.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
-    };
+        const updateFullscreenText = () => {
+            fullscreenButton.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
+        };
 
-    document.addEventListener("fullscreenchange", updateFullscreenText);
-    document.addEventListener("webkitfullscreenchange", updateFullscreenText);
-    document.addEventListener("mozfullscreenchange", updateFullscreenText);
+        document.addEventListener("fullscreenchange", updateFullscreenText);
+        document.addEventListener("webkitfullscreenchange", updateFullscreenText);
+        document.addEventListener("mozfullscreenchange", updateFullscreenText);
+    }
 });
 
 // Service request popup function
@@ -65,34 +173,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const serviceForm = document.getElementById("service-form");
     const thankYouMessage = document.getElementById("thank-you-message");
 
-    serviceButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            popup.style.display = "flex";
+    if (popup && closeButton && serviceButtons && serviceForm && thankYouMessage) {
+        serviceButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                popup.style.display = "flex";
+            });
         });
-    });
 
-    const closePopup = () => {
-        popup.style.display = "none";
-        resetForm();
-    };
+        const closePopup = () => {
+            popup.style.display = "none";
+            resetForm();
+        };
 
-    closeButton.addEventListener("click", closePopup);
-    window.addEventListener("click", event => {
-        if (event.target === popup) closePopup();
-    });
+        closeButton.addEventListener("click", closePopup);
+        window.addEventListener("click", event => {
+            if (event.target === popup) closePopup();
+        });
 
-    serviceForm.addEventListener("submit", event => {
-        event.preventDefault();
-        thankYouMessage.style.display = "block";
-        serviceForm.style.display = "none";
-        setTimeout(closePopup, 3000);
-    });
+        serviceForm.addEventListener("submit", event => {
+            event.preventDefault();
+            thankYouMessage.style.display = "block";
+            serviceForm.style.display = "none";
+            setTimeout(closePopup, 3000);
+        });
 
-    const resetForm = () => {
-        serviceForm.style.display = "block";
-        thankYouMessage.style.display = "none";
-        serviceForm.reset();
-    };
+        const resetForm = () => {
+            serviceForm.style.display = "block";
+            thankYouMessage.style.display = "none";
+            serviceForm.reset();
+        };
+    }
 });
 
 // Contact form submit functions
@@ -124,24 +234,26 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
     const inquiryForm = document.getElementById("inquiry-form");
     const inquiryOutput = document.getElementById("inquiry-output");
-  
-    inquiryForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-  
-      const name = document.getElementById("client-name").value;
-      const email = document.getElementById("client-email").value;
-      const selectedServices = document.querySelectorAll('input[name="services"]:checked');
-  
-      let servicesList = '';
-      for (let i = 0; i < selectedServices.length; i++) {
-        servicesList += '- ' + selectedServices[i].value + '<br>';
-      }
-  
-      inquiryOutput.innerHTML = `
-        <p>Thank you, <strong>${name}</strong>!</p>
-        <p>We've received your inquiry for the following services:</p>
-        <p>${servicesList || 'No services selected.'}</p>
-        <p>We will contact you at: <strong>${email}</strong></p>
-      `;
-    });
-  });
+
+    if (inquiryForm && inquiryOutput) {
+        inquiryForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("client-name").value;
+            const email = document.getElementById("client-email").value;
+            const selectedServices = document.querySelectorAll('input[name="services"]:checked');
+
+            let servicesList = '';
+            for (let i = 0; i < selectedServices.length; i++) {
+                servicesList += '- ' + selectedServices[i].value + '<br>';
+            }
+
+            inquiryOutput.innerHTML = `
+                <p>Thank you, <strong>${name}</strong>!</p>
+                <p>We've received your inquiry for the following services:</p>
+                <p>${servicesList || 'No services selected.'}</p>
+                <p>We will contact you at: <strong>${email}</strong></p>
+            `;
+        });
+    }
+});
