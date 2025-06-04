@@ -562,6 +562,17 @@ footer ul li a {
     margin-top: 2rem;
 }
 
+/* Search Bar Styles */
+#filter-search {
+    padding: 0.8rem 2rem;
+    font-size: 1.5rem;
+    max-width: 300px;
+}
+
+#filter-search::placeholder {
+    font-size: 1.5rem;
+}
+
 /* Media Queries */
 @media(max-width:1280px) {
     header {
@@ -673,5 +684,41 @@ footer ul li a {
     }
     #map {
         height: 250px;
+    }
+
+    @media (max-width: 1280px) {
+        #filter-search {
+            padding: 0.6rem 1.5rem;
+            font-size: 1.3rem;
+            max-width: 250px;
+        }
+
+        #filter-search::placeholder {
+            font-size: 1.3rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #filter-search {
+            padding: 0.5rem 1.2rem;
+            font-size: 1.1rem;
+            max-width: 200px;
+        }
+
+        #filter-search::placeholder {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        #filter-search {
+            padding: 0.4rem 1rem;
+            font-size: 1rem;
+            max-width: 80%;
+        }
+
+        #filter-search::placeholder {
+            font-size: 1rem;
+        }
     }
 }
