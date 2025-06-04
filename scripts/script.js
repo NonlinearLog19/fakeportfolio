@@ -257,3 +257,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// Gallery filter function
+document.addEventListener("DOMContentLoaded", () => {
+    const imgs = document.querySelectorAll('.projects-grid img');
+    const search = document.getElementById('filter-search');
+    const cache = [];
+
+    // For images and their alt text
+    imgs.forEach(img => {
+        cache.push({
+            element: img.parentElement,
+            text: img.alt.trim().toLowerCase()
+        });
+    });
+
+    function filter() {
+        const query = this.value.trim().toLowerCase();
+        cache.forEach(item => {
+            const index = query ? item.text.indexOf(query) : 0;
+            item.element.style.display = index === -1 ? 'none' : '';
+        });
+    }
+
+    if (search && 'oninput' in search) {
+        search.addEventListener('input', filter);
+    } else if (search) {
+        search.addEventListener('keyup', filter);
+    }
+});
