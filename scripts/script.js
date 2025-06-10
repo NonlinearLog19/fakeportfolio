@@ -286,3 +286,18 @@ document.addEventListener("DOMContentLoaded", () => {
         search.addEventListener('keyup', filter);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const ageOverlay = document.getElementById('age-gate-overlay');
+    const ageSubmitBtn = document.getElementById('age-submit-btn');
+    const ageInput = document.getElementById('age-input');
+
+    ageSubmitBtn.addEventListener('click', function () {
+        if (ageInput.value.trim() !== '') {
+            // Hide the overlay when age is entered
+            ageOverlay.style.display = 'none';
+        } else {
+            alert('Please enter your age to continue.');
+        }
+    });
+});
