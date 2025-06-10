@@ -292,6 +292,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const ageSubmitBtn = document.getElementById('age-submit-btn');
     const ageInput = document.getElementById('age-input');
 
+    function supportsInputTypeNumber() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'number');
+        return input.type === 'number';
+    }
+
+    function loadNumberPolyfill() {
+        const script = document.createElement('script');
+        script.src = 'js/numPolyfill.js';
+        document.head.appendChild(script);
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'css/number.css';
+        document.head.appendChild(link);
+    }
+
+    // Main logic
+    if (!supportsInputTypeNumber()) {
+        console.log('Number input not supported, loading polyfill...');
+        loadNumberPolyfill();
+    } else {
+        console.log('Number input supported, no polyfill needed.');
+    }
+
+    // Age gate interaction
     ageSubmitBtn.addEventListener('click', function () {
         if (ageInput.value.trim() !== '') {
             // Hide the overlay when age is entered
