@@ -287,43 +287,144 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const ageOverlay = document.getElementById('age-gate-overlay');
-    const ageSubmitBtn = document.getElementById('age-submit-btn');
-    const ageInput = document.getElementById('age-input');
+// About form validation
+(function () {
+    document.forms['about-form'].noValidate = true;
 
-    function supportsInputTypeNumber() {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'number');
-        return input.type === 'number';
-    }
+    $('#about-form').on('submit', function (e) {
+        var elements = this.elements;
+        var valid = {};
+        var isValid;
+        var isFormValid;
 
-    function loadNumberPolyfill() {
-        const script = document.createElement('script');
-        script.src = 'js/numPolyfill.js';
-        document.head.appendChild(script);
+        // Generic validation
+        for (var i = 0, l = elements.length; i < l; i++) {
+            if (elements[i].type !== 'submit') {
+                isValid = validateRequired(elements[i]) && validateTypes(elements[i]);
+                if (!isValid) {
+                    showErrorMessage(elements[i]);
+                } else {
+                    removeErrorMessage(elements[i]);
+                }
+                valid[elements[i].id] = isValid;
+            }
+        }
 
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'css/number.css';
-        document.head.appendChild(link);
-    }
-
-    // Main logic
-    if (!supportsInputTypeNumber()) {
-        console.log('Number input not supported, loading polyfill...');
-        loadNumberPolyfill();
-    } else {
-        console.log('Number input supported, no polyfill needed.');
-    }
-
-    // Age gate interaction
-    ageSubmitBtn.addEventListener('click', function () {
-        if (ageInput.value.trim() !== '') {
-            // Hide the overlay when age is entered
-            ageOverlay.style.display = 'none';
+        // Custom validation
+        if (!validateName()) {
+            showErrorMessage(document.getElementById('name'));
+            valid.name = false;
         } else {
-            alert('Please enter your age to continue.');
+            removeErrorMessage(document.getElementById('name'));
+        }
+
+        if (!validateHobbies()) {
+            showErrorMessage(document.getElementById('hobbies'));
+            valid.hobbies = false;
+        } else {
+            removeErrorMessage(document.getElementById('hobbies'));
+        }
+
+        // Check form validity
+        for (var field in valid) {
+            if (!valid[field]) {
+                isFormValid = false;
+                break;
+            }
+            isFormValid = true;
+        }
+
+        if (!isFormValid) {
+            e.preventDefault();
+        } else {
+            e.preventDefault();
+            $('#about-form').hide();
+            $('#thank-you-message').show();
+            setTimeout(function() {
+                $('#about-form-container').hide();
+            }, 3000);
         }
     });
-});
+
+    // Generic validation
+    function validateRequired(el) {
+        if (isRequired(el)) {
+            var valid = !isEmpty(el);
+            if (!valid) {
+                setErrorMessage(el, 'This field is required');
+            }
+            return valid;
+        }
+        return true;
+    }
+
+    function isRequired(el) {
+        return ((typeof el.required === 'boolean') && el.required) || (typeof el.required === 'string');
+    }
+
+    function isEmpty(el) {
+        return !el.value || el.value === el.placeholder;
+    }
+
+    function validateTypes(el) {
+        if (!el.value && !isRequired(el)) return true;
+        var type = $(el).data('type') || el.getAttribute('type');
+        if (typeof validateType[type] === 'function') {
+            return validateType[type](el);
+        }
+        return true;
+    }
+
+    // Custom validation
+    function validateName() {
+        var name = document.getElementById('name');
+        var valid = name.value.length >= 2;
+        if (!valid) {
+            setErrorMessage(name, 'Name must be at least 2 characters long');
+        }
+        return valid;
+    }
+
+    function validateHobbies() {
+        var hobbies = document.getElementById('hobbies');
+        var valid = hobbies.value.length >= 10 && hobbies.value.length <= 200;
+        if (!valid) {
+            setErrorMessage(hobbies, 'Please enter between 10 and 200 characters');
+        }
+        return valid;
+    }
+
+    // Error message
+    function setErrorMessage(el, message) {
+        $(el).data('errorMessage', message);
+    }
+
+    function getErrorMessage(el) {
+        return $(el).data('errorMessage') || el.title;
+    }
+
+    function showErrorMessage(el) {
+        var $el = $(el);
+        var errorContainer = $el.siblings('.error.message');
+        if (!errorContainer.length) {
+            errorContainer = $('<span class="error message"></span>').insertAfter($el);
+        }
+        errorContainer.text(getErrorMessage(el));
+    }
+
+    function removeErrorMessage(el) {
+        var errorContainer = $(el).siblings('.error.message');
+        errorContainer.remove();
+    }
+
+    // Type validation
+    var validateType = {
+        text: function (el) {
+            var valid = /^[a-zA-Z\s]+$/.test(el.value);
+            if (!valid && el.value) {
+                setErrorMessage(el, 'Please enter only letters and spaces');
+            }
+            return valid || !el.value;
+        }
+    };
+})();
